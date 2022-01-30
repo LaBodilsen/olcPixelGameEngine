@@ -4742,9 +4742,9 @@ namespace olc
 			{
 				bTrackMouseEventSet = TRUE;
 				TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT), TME_LEAVE, hWnd }; TrackMouseEvent(&tme);
-				ptrPGE->olc_UpdateMouseState(0, wParam == MK_LBUTTON);
-				ptrPGE->olc_UpdateMouseState(1, wParam == MK_RBUTTON);
-				ptrPGE->olc_UpdateMouseState(2, wParam == MK_MBUTTON);
+				ptrPGE->olc_UpdateMouseState(olc::Mouse::LEFT, wParam == MK_LBUTTON);
+				ptrPGE->olc_UpdateMouseState(olc::Mouse::RIGHT, wParam == MK_RBUTTON);
+				ptrPGE->olc_UpdateMouseState(olc::Mouse::MIDDLE, wParam == MK_MBUTTON);
 			}
 				// Thanks @ForAbby (Discord)
 				uint16_t x = lParam & 0xFFFF; uint16_t y = (lParam >> 16) & 0xFFFF;
