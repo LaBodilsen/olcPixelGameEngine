@@ -1,6 +1,4 @@
-<p align="center">
-  <a href="https://discord.gg/WhwHUMV"> <img src="https://img.shields.io/discord/380484403458998276?logo=discord"> </a>
-</p>
+This branch have alle pullrequest from the OneLoneCoder master branch merged in: 
 
 # olcPixelGameEngine
 The official distribution of olcPixelGameEngine, a tool used in javidx9's YouTube videos and projects.
