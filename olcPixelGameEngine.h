@@ -3943,7 +3943,7 @@ namespace olc
 		{
 			nLastFPS = nFrameCount;
 			fFrameTimer -= 1.0f;
-			std::string sTitle = "OneLoneCoder.com - Pixel Game Engine - " + sAppName + " - FPS: " + std::to_string(nFrameCount);
+			std::string sTitle = "Pixel Game Engine - " + sAppName + " - FPS: " + std::to_string(nFrameCount);
 			platform->SetWindowTitle(sTitle);
 			nFrameCount = 0;
 		}
@@ -5527,11 +5527,20 @@ namespace olc
 
 		// Windows Event Handler - this is statically connected to the windows event system
 		static LRESULT CALLBACK olc_WindowEvent(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+		static BOOL bTrackMouseEventSet = FALSE;
 		{
 			switch (uMsg)
 			{
 			case WM_MOUSEMOVE:
 			{
+				if (!bTrackMouseEventSet)
+				{
+					bTrackMouseEventSet = TRUE;
+					TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT), TME_LEAVE, hWnd }; TrackMouseEvent(&tme);
+					ptrPGE->olc_UpdateMouseState(0, wParam == MK_LBUTTON);
+					ptrPGE->olc_UpdateMouseState(1, wParam == MK_RBUTTON);
+					ptrPGE->olc_UpdateMouseState(2, wParam == MK_MBUTTON);
+				}
 				// Thanks @ForAbby (Discord)
 				uint16_t x = lParam & 0xFFFF; uint16_t y = (lParam >> 16) & 0xFFFF;
 				int16_t ix = *(int16_t*)&x;   int16_t iy = *(int16_t*)&y;
@@ -5540,7 +5549,7 @@ namespace olc
 			}
 			case WM_SIZE:       ptrPGE->olc_UpdateWindowSize(lParam & 0xFFFF, (lParam >> 16) & 0xFFFF);	return 0;
 			case WM_MOUSEWHEEL:	ptrPGE->olc_UpdateMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam));           return 0;
-			case WM_MOUSELEAVE: ptrPGE->olc_UpdateMouseFocus(false);                                    return 0;
+			case WM_MOUSELEAVE: bTrackMouseEventSet = FALSE; ptrPGE->olc_UpdateMouseFocus(false);       return 0;
 			case WM_SETFOCUS:	ptrPGE->olc_UpdateKeyFocus(true);                                       return 0;
 			case WM_KILLFOCUS:	ptrPGE->olc_UpdateKeyFocus(false);                                      return 0;
 			case WM_KEYDOWN:	ptrPGE->olc_UpdateKeyState(mapKeys[wParam], true);                      return 0;
@@ -6693,4 +6702,3 @@ namespace olc
 // O------------------------------------------------------------------------------O
 // | END OF OLC_PGE_APPLICATION                                                   |
 // O------------------------------------------------------------------------------O
-
